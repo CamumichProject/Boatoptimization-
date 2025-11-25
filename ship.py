@@ -69,3 +69,6 @@ class Ship:
         :return: Watts shaft propulsion power of the ship
         """
         return (1 + sea_margin) * self.resistance * self.speed / propulsion_eff
+    
+    def wake_fraction(self):
+        return 1
