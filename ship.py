@@ -1,4 +1,4 @@
-from PyResis.physics import residual_resistance_coef, froude_number, reynolds_number, frictional_resistance_coef
+from physics import residual_resistance_coef, froude_number, reynolds_number, frictional_resistance_coef
 
 
 class Ship:
@@ -7,7 +7,8 @@ class Ship:
     """
 
     def __init__(self, length: float, draught: float, beam: float, speed: float,
-                 slenderness_coefficient: float, prismatic_coefficient: float) -> None:
+                 slenderness_coefficient: float, prismatic_coefficient: float,
+                 CM: float) -> None:
         """
         Assign values for the main dimension of a ship.
 
@@ -19,15 +20,18 @@ class Ship:
             ∇ is displacement
         :param prismatic_coefficient: Prismatic coefficient dimensionless :math:`∇/(L\cdot A_m)` where L is length of ship,
             ∇ is displacement Am is midsection area of the ship
+        :param midship coefficient, :math:`C_M = A_M / BT`
         """
         self.length = length
         self.draught = draught
         self.beam = beam
         self.speed = speed
         self.slenderness_coefficient = slenderness_coefficient
-        self.prismatic_coefficient = prismatic_coefficient
+        self.CP = prismatic_coefficient
         self.displacement = (self.length / self.slenderness_coefficient) ** 3
-        self.surface_area = 1.025 * (1.7 * self.length * self.draught + self.displacement / self.draught)
+        self.CB = self.displacement / self.length / self.beam / self.draught
+        self.CM = CM
+        self.surface_area = 1.7 * self.length * self.draught + self.displacement / self.draught
 
     @property
     def resistance(self) -> float:
@@ -38,7 +42,7 @@ class Ship:
         """
         total_resistance_coef = frictional_resistance_coef(self.length, self.speed) + \
                                 residual_resistance_coef(self.slenderness_coefficient,
-                                                         self.prismatic_coefficient,
+                                                         self.CP,
                                                          froude_number(self.speed, self.length))
         return 1 / 2 * total_resistance_coef * 1025 * self.surface_area * self.speed ** 2
 
@@ -70,5 +74,7 @@ class Ship:
         """
         return (1 + sea_margin) * self.resistance * self.speed / propulsion_eff
     
-    def wake_fraction(self):
+    def wake_fraction(self) -> float:
+        
+        
         return 1

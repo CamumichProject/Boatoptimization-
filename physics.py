@@ -3,7 +3,7 @@ import math
 import numpy as np
 from scipy import interpolate
 
-from PyResis.constants import CR, CRNEAREST
+from constants import CR, CRNEAREST
 
 
 def residual_resistance_coef(slenderness: float, prismatic_coef: float, froude_number: float) -> float:
