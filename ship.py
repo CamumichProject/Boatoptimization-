@@ -8,7 +8,7 @@ class Ship:
 
     def __init__(self, length: float, draught: float, beam: float, speed: float,
                  slenderness_coefficient: float, prismatic_coefficient: float,
-                 CM: float) -> None:
+                 CM: float, lcb: float) -> None:
         """
         Assign values for the main dimension of a ship.
 
@@ -21,6 +21,7 @@ class Ship:
         :param prismatic_coefficient: Prismatic coefficient dimensionless :math:`∇/(L\cdot A_m)` where L is length of ship,
             ∇ is displacement Am is midsection area of the ship
         :param midship coefficient, :math:`C_M = A_M / BT`
+        :param lcb, LCB as a percentage forward of midship
         """
         self.length = length
         self.draught = draught
@@ -32,6 +33,15 @@ class Ship:
         self.CB = self.displacement / self.length / self.beam / self.draught
         self.CM = CM
         self.surface_area = 1.7 * self.length * self.draught + self.displacement / self.draught
+        self.lcb = lcb
+        self.LRL = 1 - self.CP + 0.06 * self.CP * self.lcb / (4 * self.CP - 1)
+        
+        self.c12 = 
+        
+        
+        self.onePlusk1 =
+
+
 
     @property
     def resistance(self) -> float:
@@ -73,8 +83,10 @@ class Ship:
         :return: Watts shaft propulsion power of the ship
         """
         return (1 + sea_margin) * self.resistance * self.speed / propulsion_eff
-    
+
     def wake_fraction(self) -> float:
-        
-        
+        c8 = self.beam * self.surface_area
+        return 1
+
+    def c12(self) -> float:
         return 1
