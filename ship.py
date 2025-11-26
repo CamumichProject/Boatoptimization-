@@ -72,4 +72,9 @@ class Ship:
         :param sea_margin: Sea margin take account of interaction between ship and the sea, e.g. wave
         :return: Watts shaft propulsion power of the ship
         """
-  
+        return (1 + sea_margin) * self.resistance * self.speed / propulsion_eff
+    
+    def wake_fraction(self) -> float:
+        
+        
+        return 1
