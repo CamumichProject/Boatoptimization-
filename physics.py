@@ -35,7 +35,7 @@ def froude_number(speed: float, length: float) -> float:
     return float(speed / np.sqrt(g * length))
 
 
-def reynolds_number(length: float, speed: float, temperature: float = 25) -> float:
+def reynolds_number(length: float, speed: float, temperature: float = 15) -> float:
     """
     Reynold number utility function that return Reynold number for vehicle at specific length and speed.
     Optionally, it can also take account of temperature effect of sea water.
@@ -47,8 +47,8 @@ def reynolds_number(length: float, speed: float, temperature: float = 25) -> flo
     :param temperature: degree C
     :return: Reynolds number of the vehicle (dimensionless)
     """
-    kinematic_viscosity = interpolate.interp1d([0, 10, 20, 25, 30, 40],
-                                               np.array([18.54, 13.60, 10.50, 9.37, 8.42, 6.95]) / 10 ** 7)
+    kinematic_viscosity = interpolate.interp1d([0, 10, 15, 20, 25, 30, 40],
+                                               np.array([18.54, 13.60, 11.88, 10.50, 9.37, 8.42, 6.95]) / 10 ** 7)
     # Data from http://web.mit.edu/seawater/2017_MIT_Seawater_Property_Tables_r2.pdf
     return float(length * speed / kinematic_viscosity(temperature))
 
