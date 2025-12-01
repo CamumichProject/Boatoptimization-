@@ -11,7 +11,7 @@ def residual_resistance_coef(slenderness: float, prismatic_coef: float, froude_n
     Residual resistance coefficient estimation from slenderness function, prismatic coefficient and Froude number.
 
     :param slenderness: Slenderness coefficient dimensionless :math:`L/(∇^{1/3})` where L is length of ship, ∇ is displacement
-    :param prismatic_coef: Prismatic coefficient dimensionless :math:`∇/(L\cdot A_m)` where L is length of ship, ∇ is displacement Am is midsection area of the ship
+    :param prismatic_coef: Prismatic coefficient dimensionless
     :param froude_number: Froude number of the ship dimensionless
     :return: Residual resistance of the ship
     """
@@ -64,3 +64,9 @@ def frictional_resistance_coef(length: float, speed: float, **kwargs) -> float:
     :return: Frictional resistance coefficient of the vehicle
     """
     return float(0.075 / (np.log10(reynolds_number(length, speed, **kwargs)) - 2) ** 2)
+
+def to_meters(value: float) -> float:
+    return value * 0.3048
+
+def tons_to_m3(disp) -> float:
+    return disp * 2240 / 64 * .3048**3
