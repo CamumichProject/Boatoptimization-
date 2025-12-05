@@ -27,7 +27,7 @@ class Ship:
         self.beam = beam
         self.CB = CB
         self.displacement = CB * length / 1.01675 * beam * draught
-        # print(f"displacement: {self.displacement}")
+        print(f"displacement: {self.displacement}")
         self.speed = speed * 0.5144444 # now in m/s
         self.CS = self. length / self.displacement ** 0.33333 
         self.CM = midship_coefficient
@@ -59,8 +59,6 @@ class Ship:
         total_resistance_coef = frictional_resistance_coef(self.length, self.speed) + \
                                 self.wave_resistance_coef() + self.CA
         
-        #total_resistance_coef = frictional_resistance_coef(self.length, self.speed) + \
-                                #residual_resistance_coef(self.CS, self.CP, froude_number(self.speed, self.length))
         # print(f"Frictional Resistance Coeff: {frictional_resistance_coef(self.length, self.speed):.6f}")
         # print(f"Residual Resistance Coeff: {self.wave_resistance_coef():.6f}")
         # print(f"Correlation Allowance: {self.CA:.6f}")
@@ -106,14 +104,8 @@ class Ship:
         return term1 + term2 + term3 
 
     def calc_c12(self) -> float:
-        if self.draught / self.length > 0.05:
-            return (self.draught / self.length) ** 0.2228446
+        return (self.draught / self.length) ** 0.2228446
         
-        elif self.draught / self.length > 0.02:
-            return 48.2 * (self.draught / self.length - 0.02) ** 2.078 + 0.479948
-        
-        else:
-            return 0.479948
         
     def calc_CV(self) -> float:
         Re = reynolds_number(self.length, self.speed) 
@@ -123,22 +115,13 @@ class Ship:
         return (self.onePlusk1 * CF) + CA
 
     def calc_c9(self) -> float:
-        if self.beam / self.draught < 5:
-            c8 = self.beam * self.surface_area / (self.length * self.prop_diameter * self.draught)
-        
-        else:
-            c8 = self.surface_area * (7 * self.beam / self.draught - 25) / (self.length * self.prop_diameter * (self.beam / self.draught - 3))
-
-        if c8 < 28:
-            return c8
-        else:
-            return 32 - 16 / (c8 - 24)
+        c8 = self.beam * self.surface_area / (self.length * self.prop_diameter * self.draught)
+        return c8
         
     def calc_c11(self) -> float:
-        if self.draught / self.prop_diameter < 2:
-            return self.draught / self.prop_diameter
-        else:
-            return 0.0833333 * (self.draught / self.prop_diameter) + 1.333333
+
+        return self.draught / self.prop_diameter
+
 
 
     def calc_c19(self) -> float:
@@ -175,12 +158,8 @@ class Ship:
         return 0.5834 * self.speed / .51444 / disp**(1/6) 
 
     def wave_resistance_coef(self):
-            if self.beam / self.length < 0.11:
-                c7 = 0.229577 * (self.beam / self.length) ** 0.33333
-            elif self.beam / self.length > 0.25:
-                c7 = 0.5 - 0.0625 * self.length / self.beam
-            else:
-                c7 = self.beam / self.length
+
+            c7 = self.beam / self.length
 
             eterm1 = -(self.length / self.beam)**0.80856 * (1-self.CWP)**0.30484
             eterm2 = (1-self.CP - 0.0225*self.lcb)**0.6367 * (self.LR / self.beam)**0.34574
@@ -198,10 +177,9 @@ class Ship:
             B = self.beam
             T = self.draught
             
-            if L/B < 12:
-                lam = 1.446 * self.CP - 0.03 * L/B
-            else:
-                lam = 1.446 * self.CP - 0.36
+
+            lam = 1.446 * self.CP - 0.03 * L/B
+
             
             if self.CP < 0.8:
                 c16 = 8.07981 * self.CP - 13.8673 * self.CP**2 + 6.984388 * self.CP**3
@@ -211,12 +189,8 @@ class Ship:
             m1 = 0.0140407 * L/T - 1.75254 * self.displacement**(1/3) / L - 4.79323 * B/L - c16
             
 
-            if L**3 / self.displacement < 512:
-                c15 = -1.69385
-            elif L**3/self.displacement > 1727:
-                c15 = 0
-            else:
-                c15 = -1.69385 + (L/self.displacement**(1/3) - 8.0)/2.36
+
+            c15 = -1.69385 + (L/self.displacement**(1/3) - 8.0)/2.36
 
             Fn = froude_number(self.speed, L)
             m2 = c15 * self.CP**2 * np.exp(-0.1 * Fn**(-2))

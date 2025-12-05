@@ -64,7 +64,7 @@ CWP = 0.746
 
 LCB = -0.5
 
-V = 17.25
+V = 17
 D = to_meters(26.40)
 print("\n\n\n Starting Ship 3 \n \n\n")
 ship3 = Ship(L, T, B, V, CB, CM, CWP, LCB, D)
@@ -84,3 +84,6 @@ print(f"Circle C: {ship3.circle_C():.3f}")
 print(f"wake fraction: {ship3.calc_wake_fraction():.4f}")
 print(f"thrust deduction: {ship3.calc_thrust_deduction():.4f}")
 print(f"eta_h: {ship3.eta_h:.3f}")
+print(f"surface_area: {ship3.surface_area}")
+print(f"c9: {ship3.calc_c9()}")
+print(f"Displacement: {ship3.displacement}")
